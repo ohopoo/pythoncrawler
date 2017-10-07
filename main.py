@@ -5,7 +5,7 @@ import cssutils
 import movie
 import fresh_tomatoes
 
-URL = "http://phimmoi.net/"
+URL = "https://phimmoi.net/"
 # proxies = {'http': 'http://proxy.dad.gameloft.org/proxy.pac'}
 # auth = HTTPProxyAuth("hop.duongthanh@gameloft.com", "Duth@h0gl09")
 
