@@ -6,14 +6,14 @@ import movie
 import fresh_tomatoes
 
 URL = "http://phimmoi.net/"
-proxies = {'http': 'http://proxy.dad.gameloft.org/proxy.pac'}
-auth = HTTPProxyAuth("hop.duongthanh@gameloft.com", "Duth@h0gl09")
+# proxies = {'http': 'http://proxy.dad.gameloft.org/proxy.pac'}
+# auth = HTTPProxyAuth("hop.duongthanh@gameloft.com", "Duth@h0gl09")
 
 movies_list = []
 movies = []
 
 def getUrlResponse(url):
-    return requests.get(url, proxies=proxies, auth=auth)
+    return requests.get(url)#, proxies=proxies, auth=auth)
 
 def crawler(html):
     for movie_item in html.find_all('li', class_='movie-item'):
@@ -47,7 +47,9 @@ while url is not None:
 #Creating instances of my movie class with a list of my favorite movies.
 for m in movies_list:
     movies.append(movie.Movie(m['title'],
-                                  m['poster'],
-                                  m['url']))
+                                  m['poster'].replace('http:', 'https:'),
+                                  m['url'].replace('http:', 'https:')))
+
+print(movies_list)
 if len(movies) > 0:
     fresh_tomatoes.open_movies_page(movies)

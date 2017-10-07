@@ -6,12 +6,12 @@ import re
 main_page_head = '''
 <head>
     <meta charset="utf-8">
-    <title>Fresh Tomatoes!</title>
+    <title>Movies Trailer</title>
 
     <!-- Bootstrap 3 -->
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
     <style type="text/css" media="screen">
         body {
@@ -65,7 +65,6 @@ main_page_head = '''
         $(document).on('click', '.movie-tile', function (event) {
             var trailerYouTubeId = $(this).attr('data-trailer-youtube-id');
             var sourceUrl = 'http://www.youtube.com/embed/' + trailerYouTubeId + '?autoplay=1&html5=1';
-            $(".fb-comments").attr('data-href', "http://duthaho.pythonanywhere.com/");
             $("#trailer-video-container").empty().append($("<iframe></iframe>", {
               'id': 'trailer-video',
               'type': 'text-html',
@@ -83,12 +82,9 @@ main_page_head = '''
 </head>
 '''
 
-# The main page layout and title bar
-main_page_content = '''
-<!DOCTYPE html>
-<html lang="en">
-  <body>
-    <!-- Load Facebook SDK for JavaScript -->
+# The facebook comment plugin
+facebook_comment_plugin = '''
+<!-- Load Facebook SDK for JavaScript -->
     <div id="fb-root"></div>
     <script>(function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
@@ -97,7 +93,14 @@ main_page_content = '''
       js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.10";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));</script>
+'''
 
+# The main page layout and title bar
+main_page_content = '''
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    {facebook_comment_plugin}
     <!-- Trailer Video Modal -->
     <div class="modal" id="trailer">
       <div class="modal-dialog">
@@ -107,7 +110,7 @@ main_page_content = '''
           </a>
           <div class="scale-media" id="trailer-video-container">
           </div>
-          <div class="fb-comments" data-href="" data-numposts="5"></div>
+          <div class="fb-comments" data-href="https://ohopoo.github.io/pythoncrawler/" data-numposts="5"></div>
         </div>
       </div>
     </div>
@@ -117,7 +120,7 @@ main_page_content = '''
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
           <div class="navbar-header">
-            <a class="navbar-brand" href="#">Fresh Tomatoes Movie Trailers</a>
+            <a class="navbar-brand" href="#">Movie Trailers</a>
           </div>
         </div>
       </div>
@@ -131,7 +134,7 @@ main_page_content = '''
 
 # A single movie entry html template
 movie_tile_content = '''
-<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer">
+<div class="col-md-4 col-lg-4 movie-tile text-center" data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer">
     <img src="{poster_image_url}" width="220" height="342">
     <h2>{movie_title}</h2>
 </div>
@@ -161,7 +164,7 @@ def open_movies_page(movies):
     output_file = open('index.html', 'w')
 
     # Replace the placeholder for the movie tiles with the actual dynamically generated content
-    rendered_content = main_page_content.format(movie_tiles=create_movie_tiles_content(movies))
+    rendered_content = main_page_content.format(facebook_comment_plugin=facebook_comment_plugin, movie_tiles=create_movie_tiles_content(movies))
 
     # Output the file
     output_file.write(main_page_head + rendered_content)
